@@ -19,7 +19,10 @@ async def get_users():
 
 @app.post("/user/{username}/{age}")
 async def create_user(user: User):
-    user.id = len(users) + 1
+    if users:
+        user.id = users[-1].id + 1
+    else:
+        user.id = 1
     users.append(user)
     return {"message": f"User {user.id} is registered", "user": user}
 
@@ -30,7 +33,7 @@ async def update_user(user: User):
         if us.id == user.id:
             us.username = user.username
             us.age = user.age
-            return f"The user {user.id} is updated"
+            return {"message": f"The user {user.id} is updated", "user": us}
     raise HTTPException(status_code=400, detail="User was not found")
 
 
@@ -39,6 +42,5 @@ async def delete_user(user: User):
     for us in users:
         if us.id == user.id:
             users.remove(us)
-            return f"User {user.id} deleted"
+            return {"message": f"The user {user.id} is delete", "user": us}
     raise HTTPException(status_code=400, detail="User was not found")
-
