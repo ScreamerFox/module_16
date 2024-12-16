@@ -24,7 +24,7 @@ async def create_user(user: User):
     else:
         user.id = 1
     users.append(user)
-    return {"message": f"User {user.id} is registered", "user": user}
+    return {"user": user}
 
 
 @app.put("/user/{user_id}/{username}/{age}")
@@ -33,7 +33,7 @@ async def update_user(user: User):
         if us.id == user.id:
             us.username = user.username
             us.age = user.age
-            return {"message": f"The user {user.id} is updated", "user": us}
+            return {"user": user}
     raise HTTPException(status_code=400, detail="User was not found")
 
 
